@@ -2,6 +2,8 @@ fastapi
 sqlmodel
 aiosqlite
 asyncpg
+pymysql
+aiomysql
 uvicorn[standard]
 passlib[bcrypt]
 python-jose[cryptography]

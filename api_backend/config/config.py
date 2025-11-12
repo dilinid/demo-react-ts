@@ -1,6 +1,7 @@
 import os
 from dotenv import load_dotenv
 from typing import Optional
+from urllib.parse import quote_plus
 
 # Load environment variables from .env file
 load_dotenv()
@@ -23,6 +24,8 @@ class Settings:
     
     @property
     def database_url(self) -> str:
-        return f"postgresql+asyncpg://{self.DB_USER}:{self.DB_PASSWORD}@{self.DB_HOST}/{self.DB_NAME}"
+        # URL encode the password to handle special characters
+        encoded_password = quote_plus(self.DB_PASSWORD)
+        return f"mysql+aiomysql://{self.DB_USER}:{encoded_password}@{self.DB_HOST}/{self.DB_NAME}"
 
 settings = Settings()
