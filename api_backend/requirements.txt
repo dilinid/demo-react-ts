@@ -1,0 +1,11 @@
+fastapi
+sqlmodel
+aiosqlite
+asyncpg
+uvicorn[standard]
+passlib[bcrypt]
+python-jose[cryptography]
+python-multipart
+python-dotenv
+pydantic-settings
+bcrypt==4.0.1
