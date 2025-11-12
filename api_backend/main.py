@@ -3,25 +3,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from config.config import settings
 from config.database import create_db_and_tables
 from routes.user_nav_routes import router as user_nav_router
-
-app = FastAPI(
-    title=settings.PROJECT_NAME,
-    version=settings.VERSION,
-    description="FastAPI + SQLModel Demo Backend"
-)
-
-# CORS middleware for React frontend
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://localhost:3000"],  # React dev server URLs
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-# Include routers
-app.include_router(user_nav_router, prefix="/api/v1", tags=["user-navigation"])
-
 from contextlib import asynccontextmanager
 
 @asynccontextmanager
@@ -41,6 +22,18 @@ app = FastAPI(
     description="FastAPI + SQLModel Demo Backend",
     lifespan=lifespan
 )
+
+# CORS middleware for React frontend
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173", "http://localhost:5174", "http://localhost:3000"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Include routers
+app.include_router(user_nav_router, prefix="/api/v1", tags=["user-navigation"])
 
 @app.get("/")
 def read_root():
