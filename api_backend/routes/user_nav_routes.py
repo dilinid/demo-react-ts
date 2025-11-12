@@ -1,97 +1,34 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from config.database import get_session
+from services.user_nav_service import UserNavService
+from schemas.nav_schemas import UserNavRightsListResponse
 
 router = APIRouter()
 
-@router.get("/navigation")
-async def get_navigation():
+
+@router.get("/users/{user_id}/nav-menu", response_model=UserNavRightsListResponse)
+async def get_user_nav_menu(
+    user_id: int,
+    session: AsyncSession = Depends(get_session)
+):
     """
-    Get navigation menu items with minimal B&W icons
+    Retrieve navigation menu items for a given user_id.
+    
+    Returns only navigation menu items where can_view = True.
     """
-    return {
-        "items": [
-            {
-                "label": "Dashboard",
-                "path": "/dashboard",
-                "icon": "⌂",
-                "quickAccess": False,
-            },
-            {
-                "label": "Transactions",
-                "path": "/transactions",
-                "icon": "⇄",
-                "quickAccess": True,
-                "subMenu": [
-                    {
-                        "label": "All Transactions",
-                        "path": "/transactions/all",
-                        "icon": "☰",
-                        "quickAccess": True,
-                    },
-                    {
-                        "label": "Pending",
-                        "path": "/transactions/pending",
-                        "icon": "◷",
-                        "quickAccess": False,
-                    },
-                    {
-                        "label": "Completed",
-                        "path": "/transactions/completed",
-                        "icon": "✓",
-                        "quickAccess": False,
-                    },
-                ],
-            },
-            {
-                "label": "Member List",
-                "path": "/members",
-                "icon": "⚊",
-                "quickAccess": False,
-                "subMenu": [
-                    {
-                        "label": "Active Members",
-                        "path": "/members/active",
-                        "icon": "○",
-                        "quickAccess": True,
-                    },
-                    {
-                        "label": "Inactive Members",
-                        "path": "/members/inactive",
-                        "icon": "●",
-                        "quickAccess": False,
-                    },
-                ],
-            },
-            {
-                "label": "Daily Reports",
-                "path": "/reports",
-                "icon": "▦",
-                "quickAccess": True,
-                "subMenu": [
-                    {
-                        "label": "Sales Report",
-                        "path": "/reports/sales",
-                        "icon": "◈",
-                        "quickAccess": False,
-                    },
-                    {
-                        "label": "Activity Report",
-                        "path": "/reports/activity",
-                        "icon": "▭",
-                        "quickAccess": True,
-                    },
-                    {
-                        "label": "Summary",
-                        "path": "/reports/summary",
-                        "icon": "≡",
-                        "quickAccess": False,
-                    },
-                ],
-            },
-            {
-                "label": "Settings",
-                "path": "/settings",
-                "icon": "⚙",
-                "quickAccess": False,
-            },
-        ]
-    }
+    try:
+        # Create service instance
+        user_nav_service = UserNavService(session)
+        
+        # Get navigation menu through service
+        nav_rights, total_count = await user_nav_service.get_user_navigation_menu(user_id)
+        
+        return UserNavRightsListResponse(
+            user_id=user_id,
+            nav_rights=nav_rights,
+            total_count=total_count
+        )
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
