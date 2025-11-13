@@ -19,6 +19,7 @@ function App() {
     <Layout
       userName="John Doe"
       logoText="MyApp"
+      userId={43}
       onNavigate={handleNavigation}
       onLogoClick={handleLogoClick}
       onUserClick={handleUserClick}
