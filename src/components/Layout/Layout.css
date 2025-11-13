@@ -25,6 +25,18 @@
   background-color: #ffffff;
 }
 
+.sidebar-loading {
+  width: 260px;
+  height: calc(100vh - 60px);
+  background-color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6b7280;
+  font-size: 0.875rem;
+  border-right: 1px solid #e5e7eb;
+}
+
 /* Responsive design */
 @media (max-width: 1024px) {
   .layout-content {

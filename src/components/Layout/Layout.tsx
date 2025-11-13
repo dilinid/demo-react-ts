@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../Navbar";
 import Sidebar from "../Sidebar";
 import QuickAccessMenu from "../QuickAccessMenu";
-import { NAV_ITEMS } from "../../config/navigation";
+import type { NavItem } from "../../config/navigation";
+import { navigationApi } from "../../services/navigationService";
+import { transformApiNavToNavItems } from "../../utils/navigationTransform";
 import "./Layout.css";
 
 interface LayoutProps {
@@ -10,6 +12,7 @@ interface LayoutProps {
   userName?: string;
   userAvatar?: string;
   logoText?: string;
+  userId?: number;
   onNavigate?: (path: string) => void;
   onLogoClick?: () => void;
   onUserClick?: () => void;
@@ -20,14 +23,43 @@ const Layout: React.FC<LayoutProps> = ({
   userName = "John Doe",
   userAvatar,
   logoText = "MyApp",
+  userId = 42, // Default user ID, can be passed as prop
   onNavigate,
   onLogoClick,
   onUserClick,
 }) => {
+  const [navItems, setNavItems] = useState<NavItem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchNavigation = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+        const response = await navigationApi.getUserNavigation(userId);
+        const transformedItems = transformApiNavToNavItems(response.nav_rights);
+        setNavItems(transformedItems);
+      } catch (err) {
+        console.error("Failed to fetch navigation:", err);
+        setError("Failed to load navigation menu");
+        setNavItems([]); // Set empty array on error
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchNavigation();
+  }, [userId]);
+
   const handleNavigation = (path: string) => {
     console.log("Navigating to:", path);
     onNavigate?.(path);
   };
+
+  if (error) {
+    console.warn(error);
+  }
 
   return (
     <div className="layout">
@@ -40,10 +72,16 @@ const Layout: React.FC<LayoutProps> = ({
       />
 
       <div className="layout-body">
-        <Sidebar items={NAV_ITEMS} onItemClick={handleNavigation} />
+        {isLoading ? (
+          <div className="sidebar-loading">Loading navigation...</div>
+        ) : (
+          <Sidebar items={navItems} onItemClick={handleNavigation} />
+        )}
 
         <div className="layout-main">
-          <QuickAccessMenu items={NAV_ITEMS} onItemClick={handleNavigation} />
+          {!isLoading && (
+            <QuickAccessMenu items={navItems} onItemClick={handleNavigation} />
+          )}
 
           <main className="layout-content">{children}</main>
         </div>
