@@ -1,6 +1,7 @@
 # Navigation API Integration - Summary
 
 ## Overview
+
 Successfully replaced hardcoded navigation data with dynamic API-driven navigation from the FastAPI backend.
 
 ## Files Created/Modified
@@ -8,11 +9,13 @@ Successfully replaced hardcoded navigation data with dynamic API-driven navigati
 ### 1. **New Files Created**
 
 #### `src/services/navigationService.ts`
+
 - API service for fetching user navigation data
 - TypeScript interfaces for API response types
 - Connects to: `http://localhost:8000/api/v1/users/{userId}/nav-menu`
 
 #### `src/utils/navigationTransform.ts`
+
 - Transforms API response to frontend `NavItem` structure
 - Builds hierarchical menu structure (parent → children)
 - Icon mapping based on menu titles
@@ -21,6 +24,7 @@ Successfully replaced hardcoded navigation data with dynamic API-driven navigati
 ### 2. **Files Modified**
 
 #### `src/components/Layout/Layout.tsx`
+
 - Added state management for navigation data
 - Fetches navigation from API on component mount
 - Shows loading state while fetching
@@ -28,25 +32,30 @@ Successfully replaced hardcoded navigation data with dynamic API-driven navigati
 - Added `userId` prop (defaults to 43)
 
 #### `src/components/Layout/Layout.css`
+
 - Added `.sidebar-loading` styles for loading state
 
 #### `src/App.tsx`
+
 - Added `userId={43}` prop to Layout component
 
 ## Features Implemented
 
 ### ✅ Dynamic Navigation Loading
+
 - Fetches navigation menu from backend API
 - User-specific navigation based on `userId`
 - Only shows items where `can_view: true`
 
 ### ✅ Hierarchical Menu Structure
+
 - Properly builds parent-child relationships
 - Supports multi-level nesting (Level 0, 1, 2)
 - Uses `parent_id` to organize hierarchy
 - Sorts items by `sort_order`
 
 ### ✅ Quick Access Support
+
 - Reads `quick_access` flag from API
 - Supports quick access for both:
   - Parent menu items
@@ -54,7 +63,9 @@ Successfully replaced hardcoded navigation data with dynamic API-driven navigati
 - Automatically populates Quick Access bar
 
 ### ✅ Icon Mapping
+
 Minimal B&W icons assigned based on menu titles:
+
 - **AI Analytics**: ◈
 - **Transactions**: ⇄
 - **Financial Reports**: ▦
@@ -66,14 +77,16 @@ Minimal B&W icons assigned based on menu titles:
 - And more...
 
 ### ✅ Multi-language Support
+
 API provides titles in multiple languages:
+
 - English (`title`)
 - Sinhala (`title_si`)
 - Tamil (`title_ta`)
 - Tagalog (`title_tl`)
 - Thai (`title_th`)
 
-*Currently using English; can be extended for i18n*
+_Currently using English; can be extended for i18n_
 
 ## API Response Structure
 
@@ -120,20 +133,25 @@ API provides titles in multiple languages:
 ## Configuration
 
 ### Change User ID
+
 In `App.tsx`:
+
 ```tsx
 <Layout userId={43} ... />
 ```
 
 ### API Endpoint
+
 In `src/services/navigationService.ts`:
+
 ```typescript
-const API_BASE_URL = 'http://localhost:8000/api/v1';
+const API_BASE_URL = "http://localhost:8000/api/v1";
 ```
 
 ## Testing
 
 Make sure the FastAPI backend is running:
+
 ```bash
 cd api_backend
 uvicorn main:app --reload --port 8000

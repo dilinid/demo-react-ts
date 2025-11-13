@@ -1,5 +1,5 @@
 // API service for navigation
-const API_BASE_URL = 'http://localhost:8000/api/v1';
+const API_BASE_URL = "http://localhost:8000/api/v1";
 
 export interface ApiNavMenu {
   id: number;
@@ -41,11 +41,11 @@ export interface ApiNavResponse {
 export const navigationApi = {
   async getUserNavigation(userId: number): Promise<ApiNavResponse> {
     const response = await fetch(`${API_BASE_URL}/users/${userId}/nav-menu`);
-    
+
     if (!response.ok) {
       throw new Error(`Failed to fetch navigation: ${response.statusText}`);
     }
-    
+
     return response.json();
-  }
+  },
 };
