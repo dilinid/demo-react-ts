@@ -66,6 +66,7 @@ export function transformApiNavToNavItems(
         path: child.nav_menu.url,
         icon: getIcon(child.nav_menu.title),
         quickAccess: child.quick_access,
+        keyBinding: child.nav_menu.key_binding || undefined,
       };
 
       // If this child has children (level 2 items), we need to handle them
@@ -85,6 +86,7 @@ export function transformApiNavToNavItems(
       path: menu.url,
       icon: getIcon(menu.title),
       quickAccess: navRight.quick_access,
+      keyBinding: menu.key_binding || undefined,
     };
 
     // Add submenu if has_children is true

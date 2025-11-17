@@ -4,7 +4,7 @@ import "./Sidebar.css";
 
 interface SidebarProps {
   items: NavItem[];
-  onItemClick?: (path: string) => void;
+  onItemClick?: (path: string, title?: string) => void;
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ items, onItemClick }) => {
@@ -26,13 +26,13 @@ const Sidebar: React.FC<SidebarProps> = ({ items, onItemClick }) => {
       toggleExpand(item.path);
     } else {
       setActiveItem(item.path);
-      onItemClick?.(item.path);
+      onItemClick?.(item.path, item.label);
     }
   };
 
   const handleSubItemClick = (subItem: SubMenuItem) => {
     setActiveItem(subItem.path);
-    onItemClick?.(subItem.path);
+    onItemClick?.(subItem.path, subItem.label);
   };
 
   return (
