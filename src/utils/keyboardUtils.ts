@@ -45,3 +45,16 @@ export function parseKeyEvent(event: KeyboardEvent): string {
 
   return keys.join("+");
 }
+
+/**
+ * Normalize key binding string for comparison
+ * Removes spaces and converts to lowercase
+ * @param keyBinding - The key binding string (e.g., "Alt + T" or "Alt+T")
+ * @returns Normalized string (e.g., "alt+t")
+ */
+export function normalizeKeyBinding(keyBinding: string): string {
+  if (!keyBinding) return "";
+
+  // Remove all spaces and convert to lowercase
+  return keyBinding.replace(/\s+/g, "").toLowerCase();
+}

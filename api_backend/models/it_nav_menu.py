@@ -22,6 +22,7 @@ class ItNavMenu(BaseModel, table=True):
     sort_order: int = Field(default=0, nullable=False)
     it_report_structures_id: Optional[int] = Field(default=None)
     has_children: bool = Field(default=False, nullable=False)
+    key_binding: Optional[str] = Field(default=None, max_length=255)
 
     # Relationships
     user_nav_rights: List["ItUserNavRights"] = Relationship(back_populates="nav_menu")

@@ -3,7 +3,7 @@ import "./App.css";
 import Layout from "./components/Layout";
 import PageView from "./components/PageView";
 import type { NavItem } from "./config/navigation";
-import { parseKeyEvent } from "./utils/keyboardUtils";
+import { parseKeyEvent, normalizeKeyBinding } from "./utils/keyboardUtils";
 
 function App() {
   const [currentPage, setCurrentPage] = useState<{
@@ -39,7 +39,7 @@ function App() {
       navItems.forEach((item) => {
         // Add parent item shortcuts
         if (item.keyBinding && item.quickAccess) {
-          shortcutMap.set(item.keyBinding.toLowerCase(), {
+          shortcutMap.set(normalizeKeyBinding(item.keyBinding), {
             path: item.path,
             title: item.label,
           });
@@ -49,7 +49,7 @@ function App() {
         if (item.subMenu) {
           item.subMenu.forEach((subItem) => {
             if (subItem.keyBinding && subItem.quickAccess) {
-              shortcutMap.set(subItem.keyBinding.toLowerCase(), {
+              shortcutMap.set(normalizeKeyBinding(subItem.keyBinding), {
                 path: subItem.path,
                 title: subItem.label,
               });
@@ -58,8 +58,22 @@ function App() {
         }
       });
 
+      // Debug logging
+      console.log("Available shortcuts:", Array.from(shortcutMap.keys()));
+      console.log(
+        "NavItems with keyBinding:",
+        navItems
+          .filter((i) => i.keyBinding)
+          .map((i) => ({
+            label: i.label,
+            keyBinding: i.keyBinding,
+            quickAccess: i.quickAccess,
+          }))
+      );
+
       // Parse the key combination from the event
       const combo = parseKeyEvent(event);
+      console.log("Key pressed:", combo);
 
       // Check if this combination matches any shortcut
       if (shortcutMap.has(combo)) {
