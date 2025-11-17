@@ -13,9 +13,10 @@ interface LayoutProps {
   userAvatar?: string;
   logoText?: string;
   userId?: number;
-  onNavigate?: (path: string) => void;
+  onNavigate?: (path: string, title?: string) => void;
   onLogoClick?: () => void;
   onUserClick?: () => void;
+  onNavItemsLoaded?: (items: NavItem[]) => void;
 }
 
 const Layout: React.FC<LayoutProps> = ({
@@ -27,6 +28,7 @@ const Layout: React.FC<LayoutProps> = ({
   onNavigate,
   onLogoClick,
   onUserClick,
+  onNavItemsLoaded,
 }) => {
   const [navItems, setNavItems] = useState<NavItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -40,6 +42,7 @@ const Layout: React.FC<LayoutProps> = ({
         const response = await navigationApi.getUserNavigation(userId);
         const transformedItems = transformApiNavToNavItems(response.nav_rights);
         setNavItems(transformedItems);
+        onNavItemsLoaded?.(transformedItems);
       } catch (err) {
         console.error("Failed to fetch navigation:", err);
         setError("Failed to load navigation menu");
@@ -50,11 +53,11 @@ const Layout: React.FC<LayoutProps> = ({
     };
 
     fetchNavigation();
-  }, [userId]);
+  }, [userId, onNavItemsLoaded]);
 
-  const handleNavigation = (path: string) => {
-    console.log("Navigating to:", path);
-    onNavigate?.(path);
+  const handleNavigation = (path: string, title?: string) => {
+    console.log("Navigating to:", path, title);
+    onNavigate?.(path, title);
   };
 
   if (error) {

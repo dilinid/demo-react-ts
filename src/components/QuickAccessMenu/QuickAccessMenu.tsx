@@ -1,16 +1,18 @@
 import React from "react";
 import type { NavItem } from "../../config/navigation";
+import { formatKeyBinding } from "../../utils/keyboardUtils";
 import "./QuickAccessMenu.css";
 
 interface QuickAccessMenuProps {
   items: NavItem[];
-  onItemClick?: (path: string) => void;
+  onItemClick?: (path: string, title?: string) => void;
 }
 
 interface QuickAccessItem {
   label: string;
   path: string;
   icon?: React.ReactNode;
+  keyBinding?: string;
 }
 
 const QuickAccessMenu: React.FC<QuickAccessMenuProps> = ({
@@ -27,6 +29,7 @@ const QuickAccessMenu: React.FC<QuickAccessMenuProps> = ({
         label: item.label,
         path: item.path,
         icon: item.icon,
+        keyBinding: item.keyBinding,
       });
     }
 
@@ -38,6 +41,7 @@ const QuickAccessMenu: React.FC<QuickAccessMenuProps> = ({
             label: subItem.label,
             path: subItem.path,
             icon: subItem.icon,
+            keyBinding: subItem.keyBinding,
           });
         }
       });
@@ -48,8 +52,8 @@ const QuickAccessMenu: React.FC<QuickAccessMenuProps> = ({
     return null;
   }
 
-  const handleClick = (path: string) => {
-    onItemClick?.(path);
+  const handleClick = (path: string, label: string) => {
+    onItemClick?.(path, label);
   };
 
   return (
@@ -60,13 +64,13 @@ const QuickAccessMenu: React.FC<QuickAccessMenuProps> = ({
           <div
             key={item.path}
             className="quick-access-item"
-            onClick={() => handleClick(item.path)}
+            onClick={() => handleClick(item.path, item.label)}
             role="button"
             tabIndex={0}
             onKeyDown={(e) => {
               if (e.key === "Enter" || e.key === " ") {
                 e.preventDefault();
-                handleClick(item.path);
+                handleClick(item.path, item.label);
               }
             }}
           >
@@ -74,6 +78,11 @@ const QuickAccessMenu: React.FC<QuickAccessMenuProps> = ({
               <span className="quick-access-icon">{item.icon}</span>
             )}
             <span className="quick-access-label">{item.label}</span>
+            {item.keyBinding && (
+              <span className="keybinding-badge">
+                {formatKeyBinding(item.keyBinding)}
+              </span>
+            )}
           </div>
         ))}
       </div>
