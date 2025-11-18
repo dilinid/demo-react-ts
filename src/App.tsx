@@ -30,6 +30,11 @@ function App() {
     console.log("User profile clicked");
   };
 
+  const handleLanguageChange = (language: string) => {
+    console.log("Language changed to:", language);
+    // Here you would implement language change logic (i18n, etc.)
+  };
+
   // Keyboard shortcut handler
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -97,6 +102,7 @@ function App() {
       onLogoClick={handleLogoClick}
       onUserClick={handleUserClick}
       onNavItemsLoaded={setNavItems}
+      onLanguageChange={handleLanguageChange}
     >
       {currentPage && (
         <PageView title={currentPage.title} path={currentPage.path} />

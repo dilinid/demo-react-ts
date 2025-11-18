@@ -17,6 +17,7 @@ interface LayoutProps {
   onLogoClick?: () => void;
   onUserClick?: () => void;
   onNavItemsLoaded?: (items: NavItem[]) => void;
+  onLanguageChange?: (language: string) => void;
 }
 
 const Layout: React.FC<LayoutProps> = ({
@@ -29,6 +30,7 @@ const Layout: React.FC<LayoutProps> = ({
   onLogoClick,
   onUserClick,
   onNavItemsLoaded,
+  onLanguageChange,
 }) => {
   const [navItems, setNavItems] = useState<NavItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -72,6 +74,7 @@ const Layout: React.FC<LayoutProps> = ({
         logoText={logoText}
         onLogoClick={onLogoClick}
         onUserClick={onUserClick}
+        onLanguageChange={onLanguageChange}
       />
 
       <div className="layout-body">
