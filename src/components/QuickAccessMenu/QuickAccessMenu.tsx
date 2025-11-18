@@ -1,6 +1,7 @@
 import React from "react";
 import type { NavItem } from "../../config/navigation";
 import { formatKeyBinding } from "../../utils/keyboardUtils";
+import { useTranslation } from "../../contexts/TranslationContext";
 import "./QuickAccessMenu.css";
 
 interface QuickAccessMenuProps {
@@ -19,6 +20,8 @@ const QuickAccessMenu: React.FC<QuickAccessMenuProps> = ({
   items,
   onItemClick,
 }) => {
+  const { translate } = useTranslation();
+
   // Collect all items with quickAccess flag (both parent and sub-menu items)
   const quickAccessItems: QuickAccessItem[] = [];
 
@@ -77,7 +80,7 @@ const QuickAccessMenu: React.FC<QuickAccessMenuProps> = ({
             {item.icon && (
               <span className="quick-access-icon">{item.icon}</span>
             )}
-            <span className="quick-access-label">{item.label}</span>
+            <span className="quick-access-label">{translate(item.label)}</span>
             {item.keyBinding && (
               <span className="keybinding-badge">
                 {formatKeyBinding(item.keyBinding)}

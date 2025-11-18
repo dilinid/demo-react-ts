@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import type { NavItem, SubMenuItem } from "../../config/navigation";
+import { useTranslation } from "../../contexts/TranslationContext";
 import "./Sidebar.css";
 
 interface SidebarProps {
@@ -10,6 +11,7 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ items, onItemClick }) => {
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
   const [activeItem, setActiveItem] = useState<string>("");
+  const { translate } = useTranslation();
 
   const toggleExpand = (path: string) => {
     const newExpanded = new Set(expandedItems);
@@ -54,7 +56,9 @@ const Sidebar: React.FC<SidebarProps> = ({ items, onItemClick }) => {
                     {item.icon && (
                       <span className="sidebar-icon">{item.icon}</span>
                     )}
-                    <span className="sidebar-label">{item.label}</span>
+                    <span className="sidebar-label">
+                      {translate(item.label)}
+                    </span>
                   </div>
                   {hasSubMenu && (
                     <span
@@ -85,7 +89,7 @@ const Sidebar: React.FC<SidebarProps> = ({ items, onItemClick }) => {
                             </span>
                           )}
                           <span className="sidebar-sublabel">
-                            {subItem.label}
+                            {translate(subItem.label)}
                           </span>
                         </li>
                       );

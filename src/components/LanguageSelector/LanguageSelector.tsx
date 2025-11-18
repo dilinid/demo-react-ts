@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { languageApi, type Language } from "../../services/languageService";
+import { useTranslation } from "../../contexts/TranslationContext";
 import "./LanguageSelector.css";
 
 interface LanguageSelectorProps {
@@ -9,13 +10,14 @@ interface LanguageSelectorProps {
 
 const LanguageSelector: React.FC<LanguageSelectorProps> = ({
   onLanguageChange,
-  defaultLanguage = "en",
+  defaultLanguage = "english",
 }) => {
   const [languages, setLanguages] = useState<Language[]>([]);
   const [selectedLanguage, setSelectedLanguage] = useState(defaultLanguage);
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const { setLanguage } = useTranslation();
 
   useEffect(() => {
     const fetchLanguages = async () => {
@@ -50,6 +52,7 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({
   const handleLanguageSelect = (language: string, displayName: string) => {
     console.log(`Language selected: ${language} (${displayName})`);
     setSelectedLanguage(language);
+    setLanguage(language); // Update translation context
     setIsOpen(false);
     onLanguageChange?.(language);
   };
