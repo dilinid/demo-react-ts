@@ -4,6 +4,7 @@ import Layout from "./components/Layout";
 import PageView from "./components/PageView";
 import type { NavItem } from "./config/navigation";
 import { parseKeyEvent, normalizeKeyBinding } from "./utils/keyboardUtils";
+import { TranslationProvider } from "./contexts/TranslationContext";
 
 function App() {
   const [currentPage, setCurrentPage] = useState<{
@@ -28,6 +29,11 @@ function App() {
 
   const handleUserClick = () => {
     console.log("User profile clicked");
+  };
+
+  const handleLanguageChange = (language: string) => {
+    console.log("Language changed to:", language);
+    // Here you would implement language change logic (i18n, etc.)
   };
 
   // Keyboard shortcut handler
@@ -89,19 +95,22 @@ function App() {
   }, [navItems]);
 
   return (
-    <Layout
-      userName="John Doe"
-      logoText="MyApp"
-      userId={43}
-      onNavigate={handleNavigation}
-      onLogoClick={handleLogoClick}
-      onUserClick={handleUserClick}
-      onNavItemsLoaded={setNavItems}
-    >
-      {currentPage && (
-        <PageView title={currentPage.title} path={currentPage.path} />
-      )}
-    </Layout>
+    <TranslationProvider defaultLanguage="english">
+      <Layout
+        userName="John Doe"
+        logoText="MyApp"
+        userId={43}
+        onNavigate={handleNavigation}
+        onLogoClick={handleLogoClick}
+        onUserClick={handleUserClick}
+        onNavItemsLoaded={setNavItems}
+        onLanguageChange={handleLanguageChange}
+      >
+        {currentPage && (
+          <PageView title={currentPage.title} path={currentPage.path} />
+        )}
+      </Layout>
+    </TranslationProvider>
   );
 }
 
