@@ -1,15 +1,17 @@
 import React, { useState } from "react";
 import type { NavItem, SubMenuItem } from "../../config/navigation";
+import { useTranslation } from "../../contexts/TranslationContext";
 import "./Sidebar.css";
 
 interface SidebarProps {
   items: NavItem[];
-  onItemClick?: (path: string) => void;
+  onItemClick?: (path: string, title?: string) => void;
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ items, onItemClick }) => {
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
   const [activeItem, setActiveItem] = useState<string>("");
+  const { translate } = useTranslation();
 
   const toggleExpand = (path: string) => {
     const newExpanded = new Set(expandedItems);
@@ -26,13 +28,13 @@ const Sidebar: React.FC<SidebarProps> = ({ items, onItemClick }) => {
       toggleExpand(item.path);
     } else {
       setActiveItem(item.path);
-      onItemClick?.(item.path);
+      onItemClick?.(item.path, item.label);
     }
   };
 
   const handleSubItemClick = (subItem: SubMenuItem) => {
     setActiveItem(subItem.path);
-    onItemClick?.(subItem.path);
+    onItemClick?.(subItem.path, subItem.label);
   };
 
   return (
@@ -54,7 +56,9 @@ const Sidebar: React.FC<SidebarProps> = ({ items, onItemClick }) => {
                     {item.icon && (
                       <span className="sidebar-icon">{item.icon}</span>
                     )}
-                    <span className="sidebar-label">{item.label}</span>
+                    <span className="sidebar-label">
+                      {translate(item.label)}
+                    </span>
                   </div>
                   {hasSubMenu && (
                     <span
@@ -85,7 +89,7 @@ const Sidebar: React.FC<SidebarProps> = ({ items, onItemClick }) => {
                             </span>
                           )}
                           <span className="sidebar-sublabel">
-                            {subItem.label}
+                            {translate(subItem.label)}
                           </span>
                         </li>
                       );

@@ -18,6 +18,7 @@ class NavMenuResponse(BaseModel):
     sort_order: int
     is_active: bool
     has_children: bool
+    key_binding: Optional[str] = None
     created_at: datetime
     updated_at: datetime
 

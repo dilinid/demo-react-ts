@@ -1,4 +1,5 @@
 import React from "react";
+import LanguageSelector from "../LanguageSelector";
 import "./Navbar.css";
 
 interface NavbarProps {
@@ -7,6 +8,7 @@ interface NavbarProps {
   logoText?: string;
   onLogoClick?: () => void;
   onUserClick?: () => void;
+  onLanguageChange?: (language: string) => void;
 }
 
 const Navbar: React.FC<NavbarProps> = ({
@@ -15,6 +17,7 @@ const Navbar: React.FC<NavbarProps> = ({
   logoText = "Logo",
   onLogoClick,
   onUserClick,
+  onLanguageChange,
 }) => {
   return (
     <nav className="navbar">
@@ -23,6 +26,7 @@ const Navbar: React.FC<NavbarProps> = ({
       </div>
 
       <div className="navbar-right">
+        <LanguageSelector onLanguageChange={onLanguageChange} />
         <span className="navbar-user-name">{userName}</span>
         <div className="navbar-avatar" onClick={onUserClick}>
           {userAvatar ? (

@@ -16,6 +16,7 @@ export interface ApiNavMenu {
   sort_order: number;
   is_active: boolean;
   has_children: boolean;
+  key_binding: string | null;
   created_at: string;
   updated_at: string;
 }

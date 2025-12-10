@@ -5,6 +5,7 @@ export interface SubMenuItem {
   path: string;
   icon?: React.ReactNode;
   quickAccess?: boolean;
+  keyBinding?: string;
 }
 
 export interface NavItem {
@@ -12,6 +13,7 @@ export interface NavItem {
   path: string;
   icon?: React.ReactNode;
   quickAccess?: boolean;
+  keyBinding?: string;
   subMenu?: SubMenuItem[];
 }
 
